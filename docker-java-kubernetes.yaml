@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: docker-java-demo
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: server
+  template:
+    metadata:
+      labels:
+        service: server
+    spec:
+      containers:
+        - name: server-service
+          image: mraxel01/sharehope
+          imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-entrypoint
+  namespace: default
+spec:
+  type: NodePort
+  selector:
+    service: server
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 30001
