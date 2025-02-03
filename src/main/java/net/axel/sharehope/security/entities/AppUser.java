@@ -4,10 +4,12 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.axel.sharehope.domain.entities.Donation;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.UUID;
+import java.util.Set;
 
 @Entity
 @Table
@@ -15,18 +17,20 @@ import java.util.UUID;
 @Data @NoArgsConstructor @AllArgsConstructor
 public class AppUser {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(unique = true)
     private String username;
+
+    @Column(unique = true)
+    private String email;
 
     private String password;
 
     private String phone;
 
-    private String profilePicture;
-
     @ManyToMany(fetch = FetchType.EAGER)
-    private List<AppRole> roles = new ArrayList<>();
+    private Set<AppRole> roles = new HashSet<>();
+
 }
