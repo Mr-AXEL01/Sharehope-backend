@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
 @Table(name = "articles")
@@ -14,8 +13,8 @@ import java.util.UUID;
 @Data @NoArgsConstructor @AllArgsConstructor
 public class Article {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String title;
 
@@ -24,6 +23,4 @@ public class Article {
     private String text;
 
     private LocalDateTime createdAt;
-
-    @ManyToOne
 }
