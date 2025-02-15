@@ -7,14 +7,13 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "actions")
+@Inheritance(strategy = InheritanceType.JOINED)
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Data @NoArgsConstructor @AllArgsConstructor
 @Accessors(chain = true)
 public class Action implements Serializable {
     @Id
@@ -25,7 +24,7 @@ public class Action implements Serializable {
 
     private String description;
 
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
