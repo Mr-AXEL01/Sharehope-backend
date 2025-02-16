@@ -1,4 +1,9 @@
 spring:
+
+  docker:
+    compose:
+      lifecycle-management: start_only
+
   jpa:
     generate-ddl: true
     hibernate:
@@ -12,3 +17,6 @@ spring:
     url: jdbc:postgresql://localhost:5432/${POSTGRES_DB}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
+
+  flyway:
+    locations: classpath:db/migration
