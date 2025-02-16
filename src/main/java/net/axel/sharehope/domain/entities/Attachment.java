@@ -5,28 +5,25 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "actions")
-@Inheritance(strategy = InheritanceType.JOINED)
+@Table(name = "attachments")
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
-@Accessors(chain = true)
-public abstract class Action {
+public class Attachment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Double amount;
+    private String filePath;
 
-    private String description;
+    private String fileType;
 
-    private LocalDateTime createdAt;
+    private LocalDateTime uploadDate;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
-    private Category category;
+    private Long attachableId;
+
+    private String attachableType;
 }
