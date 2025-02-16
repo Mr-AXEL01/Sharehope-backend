@@ -2,9 +2,10 @@ package net.axel.sharehope.security.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import net.axel.sharehope.domain.entities.Donation;
+import lombok.Setter;
+import net.axel.sharehope.domain.entities.Article;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -12,9 +13,9 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table
+@Table(name = "users")
 
-@Data @NoArgsConstructor @AllArgsConstructor
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class AppUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +32,13 @@ public class AppUser {
     private String phone;
 
     @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "app_user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
     private Set<AppRole> roles = new HashSet<>();
 
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
+    private List<Article> articles = new ArrayList<>();
 }
