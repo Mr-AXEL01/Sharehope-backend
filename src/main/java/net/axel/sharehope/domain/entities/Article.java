@@ -2,15 +2,17 @@ package net.axel.sharehope.domain.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import net.axel.sharehope.security.entities.AppUser;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "articles")
 
-@Data @NoArgsConstructor @AllArgsConstructor
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class Article {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +22,12 @@ public class Article {
 
     private String description;
 
-    private String text;
+    @Column(columnDefinition = "TEXT")
+    private String content;
 
     private LocalDateTime createdAt;
+
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    private AppUser author;
 }
