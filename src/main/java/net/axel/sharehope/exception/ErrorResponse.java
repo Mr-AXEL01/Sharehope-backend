@@ -1,10 +1,10 @@
 package net.axel.sharehope.exception;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 public record ErrorResponse(
         int statusCode,
-        Instant timestamp,
+        LocalDateTime timestamp,
         String message,
         String description,
         Object errors
