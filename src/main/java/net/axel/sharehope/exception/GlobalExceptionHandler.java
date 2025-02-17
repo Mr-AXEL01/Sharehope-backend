@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,7 +33,7 @@ public class GlobalExceptionHandler {
 
         return new ErrorResponse(
                 HttpStatus.BAD_REQUEST.value(),
-                Instant.now(),
+                LocalDateTime.now(),
                 VALIDATION_FAILED_MESSAGE,
                 request.getDescription(false),
                 errors);
@@ -44,7 +44,7 @@ public class GlobalExceptionHandler {
     public ErrorResponse resourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
         return new ErrorResponse(
                 HttpStatus.NOT_FOUND.value(),
-                Instant.now(),
+                LocalDateTime.now(),
                 ENTITY_NOT_FOUND_MESSAGE,
                 request.getDescription(false),
                 ex.getMessage()
@@ -56,7 +56,7 @@ public class GlobalExceptionHandler {
     public ErrorResponse handleBusinessException(BusinessException ex, WebRequest request) {
         return new ErrorResponse(
                 HttpStatus.BAD_REQUEST.value(),
-                Instant.now(),
+                LocalDateTime.now(),
                 "Business rule violation",
                 request.getDescription(false),
                 ex.getMessage()
@@ -68,7 +68,7 @@ public class GlobalExceptionHandler {
     public ErrorResponse handleIllegalArgumentException(IllegalArgumentException ex, WebRequest request) {
         return new ErrorResponse(
                 HttpStatus.BAD_REQUEST.value(),
-                Instant.now(),
+                LocalDateTime.now(),
                 INVALID_ARGUMENT_MESSAGE,
                 request.getDescription(false),
                 ex.getMessage()
@@ -80,7 +80,7 @@ public class GlobalExceptionHandler {
     public ErrorResponse globalExceptionHandler(Exception ex, WebRequest request) {
         return new ErrorResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                Instant.now(),
+                LocalDateTime.now(),
                 ex.getClass().getSimpleName(),
                 request.getDescription(false),
                 ex.getMessage()
