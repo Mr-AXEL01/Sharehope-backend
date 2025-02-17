@@ -15,7 +15,10 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class AppUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

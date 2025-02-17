@@ -13,7 +13,11 @@ import java.util.List;
 @Entity
 @Table(name = "categories")
 
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Accessors(chain = true)
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Accessors(chain = true)
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

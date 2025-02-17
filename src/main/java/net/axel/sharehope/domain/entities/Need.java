@@ -13,9 +13,12 @@ import net.axel.sharehope.domain.enums.NeedStatus;
 @Entity
 @Table(name = "needs")
 
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Need extends Action {
-    
+
     @Enumerated(EnumType.STRING)
     private NeedStatus needStatus;
 }

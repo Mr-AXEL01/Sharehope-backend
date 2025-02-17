@@ -13,7 +13,10 @@ import net.axel.sharehope.domain.enums.DonationStatus;
 @Entity
 @Table(name = "donations")
 
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Donation extends Action {
 
     @Enumerated(EnumType.STRING)
