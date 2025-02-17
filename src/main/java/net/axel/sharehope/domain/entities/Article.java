@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import net.axel.sharehope.security.entities.AppUser;
+import net.axel.sharehope.security.domain.entity.AppUser;
 
 import java.time.LocalDateTime;
 
