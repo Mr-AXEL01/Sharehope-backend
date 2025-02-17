@@ -1,4 +1,4 @@
-package net.axel.sharehope.security.entities;
+package net.axel.sharehope.security.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
