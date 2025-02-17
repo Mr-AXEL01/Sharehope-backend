@@ -7,13 +7,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Entity
 @Table(name = "actions")
 @Inheritance(strategy = InheritanceType.JOINED)
 
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Accessors(chain = true)
 public abstract class Action {
     @Id
@@ -24,7 +27,7 @@ public abstract class Action {
 
     private String description;
 
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
