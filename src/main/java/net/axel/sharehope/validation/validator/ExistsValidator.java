@@ -3,20 +3,17 @@ package net.axel.sharehope.validation.validator;
 import jakarta.persistence.EntityManager;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import lombok.RequiredArgsConstructor;
 import net.axel.sharehope.validation.Exists;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class ExistsValidator implements ConstraintValidator<Exists, Object> {
 
     private final EntityManager entityManager;
     private Class<?> entityClass;
     private String fieldName;
-
-    public ExistsValidator(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
-
 
     @Override
     public void initialize(Exists constraintAnnotation) {
