@@ -5,7 +5,7 @@ import java.time.Instant;
 /**
  * Projection for {@link net.axel.sharehope.domain.entities.Article}
  */
-public interface ArticleResponseDTO {
+public interface ArticleProjectionDTO {
     Long getId();
 
     String getTitle();
