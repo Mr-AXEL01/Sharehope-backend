@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 import net.axel.sharehope.domain.entities.Article;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Accessors(chain = true)
 public class AppUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
