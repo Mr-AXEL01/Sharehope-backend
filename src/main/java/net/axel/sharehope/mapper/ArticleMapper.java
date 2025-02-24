@@ -1,7 +1,10 @@
 package net.axel.sharehope.mapper;
 
 import net.axel.sharehope.domain.dtos.article.ArticleRequestDTO;
+import net.axel.sharehope.domain.dtos.article.ArticleResponseDTO;
 import net.axel.sharehope.domain.entities.Article;
+import org.mapstruct.Mapper;
 
-public interface ArticleMapper extends BaseMapper<Article, ArticleRequestDTO> {
+@Mapper(componentModel = "spring")
+public interface ArticleMapper extends BaseMapper<Article, ArticleRequestDTO, ArticleResponseDTO> {
 }
