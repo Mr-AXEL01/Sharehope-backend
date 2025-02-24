@@ -7,7 +7,7 @@ import java.time.Instant;
 /**
  * Projection for {@link net.axel.sharehope.domain.entities.Need}
  */
-public interface NeedResponseDTO {
+public interface NeedProjectionDTO {
     Long getId();
 
     Double getAmount();

@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Projection for {@link net.axel.sharehope.domain.entities.Category}
  */
-public interface CategoryResponseDTO {
+public interface CategoryProjectionDTO {
     Long getId();
 
     String getCategoryName();

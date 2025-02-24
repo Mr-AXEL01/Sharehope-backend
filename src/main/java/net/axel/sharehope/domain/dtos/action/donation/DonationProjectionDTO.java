@@ -1,6 +1,6 @@
 package net.axel.sharehope.domain.dtos.action.donation;
 
-import net.axel.sharehope.domain.dtos.action.need.NeedResponseDTO;
+import net.axel.sharehope.domain.dtos.action.need.NeedProjectionDTO;
 import net.axel.sharehope.domain.enums.DonationStatus;
 
 import java.time.Instant;
@@ -8,7 +8,7 @@ import java.time.Instant;
 /**
  * Projection for {@link net.axel.sharehope.domain.entities.Donation}
  */
-public interface DonationResponseDTO {
+public interface DonationProjectionDTO {
     Long getId();
 
     Double getAmount();
@@ -19,5 +19,5 @@ public interface DonationResponseDTO {
 
     DonationStatus getDonationStatus();
 
-    NeedResponseDTO.CategoryNestedDTO getCategory();
+    NeedProjectionDTO.CategoryNestedDTO getCategory();
 }

@@ -7,7 +7,7 @@ import java.util.Set;
 /**
  * Projection for {@link net.axel.sharehope.security.domain.entity.AppUser}
  */
-public interface AppUserResponseDTO {
+public interface AppUserProjectionDTO {
     Long getId();
 
     String getUsername();
