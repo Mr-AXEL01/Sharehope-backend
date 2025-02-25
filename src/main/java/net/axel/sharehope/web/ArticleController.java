@@ -51,4 +51,10 @@ public class ArticleController {
         ArticleResponseDTO updatedArticle = service.update(id, updateDTO);
         return ResponseEntity.ok(updatedArticle);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
+        service.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }

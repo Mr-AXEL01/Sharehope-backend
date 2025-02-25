@@ -15,4 +15,6 @@ public interface ArticleService {
     ArticleProjectionDTO findById(Long id);
 
     ArticleResponseDTO update(Long id, UpdateArticleDTO requestDTO);
+
+    void delete(Long id);
 }

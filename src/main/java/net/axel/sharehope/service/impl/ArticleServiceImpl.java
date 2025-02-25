@@ -50,7 +50,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public ArticleProjectionDTO findById(Long id) {
         return repository.findArticleById(id)
-                .orElseThrow(()-> new ResourceNotFoundException("Article", id));
+                .orElseThrow(() -> new ResourceNotFoundException("Article", id));
     }
 
     @Override
@@ -60,9 +60,17 @@ public class ArticleServiceImpl implements ArticleService {
         return mapper.toResponse(existingArticle);
     }
 
+    @Override
+    public void delete(Long id) {
+        if (!repository.existsById(id)) {
+            throw new ResourceNotFoundException("No article to delete with the ID: " + id);
+        }
+        repository.deleteById(id);
+    }
+
     private Article getArticleById(Long id) {
         return repository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException("Article", id));
+                .orElseThrow(() -> new ResourceNotFoundException("Article", id));
     }
 
     private AppUser getAuthor(Long authorId) {
