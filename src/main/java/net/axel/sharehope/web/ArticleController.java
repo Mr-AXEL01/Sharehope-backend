@@ -2,15 +2,15 @@ package net.axel.sharehope.web;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import net.axel.sharehope.domain.dtos.article.ArticleRequestDTO;
+import net.axel.sharehope.domain.dtos.article.ArticleProjectionDTO;
+import net.axel.sharehope.domain.dtos.article.CreateArticleDTO;
 import net.axel.sharehope.domain.dtos.article.ArticleResponseDTO;
+import net.axel.sharehope.domain.dtos.article.UpdateArticleDTO;
 import net.axel.sharehope.service.ArticleService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(ArticleController.CONTROLLER_PATH)
@@ -23,8 +23,32 @@ public class ArticleController {
     private final ArticleService service;
 
     @PostMapping
-    public ResponseEntity<ArticleResponseDTO> create(@RequestBody @Valid ArticleRequestDTO requestDto) {
+    public ResponseEntity<ArticleResponseDTO> create(@RequestBody @Valid CreateArticleDTO requestDto) {
         ArticleResponseDTO article = service.create(requestDto);
         return new ResponseEntity<>(article, HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<ArticleProjectionDTO>> findAll(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "3") int size
+    ) {
+        Page<ArticleProjectionDTO> articles = service.findAll(page, size);
+        return ResponseEntity.ok(articles);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ArticleProjectionDTO> findById(@PathVariable("id") Long id) {
+        ArticleProjectionDTO article = service.findById(id);
+        return ResponseEntity.ok(article);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ArticleResponseDTO> update(
+            @PathVariable("id") Long id,
+            @RequestBody @Valid UpdateArticleDTO updateDTO
+    ) {
+        ArticleResponseDTO updatedArticle = service.update(id, updateDTO);
+        return ResponseEntity.ok(updatedArticle);
     }
 }
