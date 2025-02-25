@@ -6,9 +6,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import net.axel.sharehope.domain.dtos.article.UpdateArticleDTO;
 import net.axel.sharehope.security.domain.entity.AppUser;
 
 import java.time.Instant;
+import java.util.Optional;
+import java.util.function.Consumer;
 
 @Entity
 @Table(name = "articles")
@@ -37,12 +40,24 @@ public class Article {
     private AppUser author;
 
     public static Article createArticle(String title, String description, String content, AppUser author) {
-        Article article     = new Article();
-        article.title       = title;
+        Article article = new Article();
+        article.title = title;
         article.description = description;
-        article.content     = content;
-        article.createdAt   = Instant.now();
-        article.author      = author;
+        article.content = content;
+        article.createdAt = Instant.now();
+        article.author = author;
         return article;
+    }
+
+    public void updateArticle(UpdateArticleDTO updateDto) {
+        updateField(updateDto.title(), this.title, newValue -> this.title = newValue);
+        updateField(updateDto.description(), this.description, newValue -> this.description = newValue);
+        updateField(updateDto.content(), this.content, newValue -> this.content = newValue);
+    }
+
+    private <T> void updateField(T newValue, T currentValue, Consumer<T> setter) {
+        if (newValue != null && !newValue.equals(currentValue)) {
+            setter.accept(newValue);
+        }
     }
 }
