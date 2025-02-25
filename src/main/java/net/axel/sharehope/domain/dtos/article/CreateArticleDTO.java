@@ -8,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-public record ArticleRequestDTO(
+public record CreateArticleDTO(
 
         @NotBlank String title,
 
