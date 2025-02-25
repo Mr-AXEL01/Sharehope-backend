@@ -1,9 +1,18 @@
 package net.axel.sharehope.service;
 
-import net.axel.sharehope.domain.dtos.article.ArticleRequestDTO;
+import net.axel.sharehope.domain.dtos.article.ArticleProjectionDTO;
+import net.axel.sharehope.domain.dtos.article.CreateArticleDTO;
 import net.axel.sharehope.domain.dtos.article.ArticleResponseDTO;
+import net.axel.sharehope.domain.dtos.article.UpdateArticleDTO;
+import org.springframework.data.domain.Page;
 
 public interface ArticleService {
 
-    ArticleResponseDTO create(ArticleRequestDTO requestDTO);
+    ArticleResponseDTO create(CreateArticleDTO requestDTO);
+
+    Page<ArticleProjectionDTO> findAll(int page, int size);
+
+    ArticleProjectionDTO findById(Long id);
+
+    ArticleResponseDTO update(Long id, UpdateArticleDTO requestDTO);
 }
