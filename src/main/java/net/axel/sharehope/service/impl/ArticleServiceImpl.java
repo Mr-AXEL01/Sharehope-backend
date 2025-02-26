@@ -57,6 +57,9 @@ public class ArticleServiceImpl implements ArticleService {
     public ArticleResponseDTO update(Long id, UpdateArticleDTO updateDTO) {
         Article existingArticle = getArticleById(id);
         existingArticle.updateArticle(updateDTO);
+
+//        TODO: update the attachments.
+
         return mapper.toResponse(existingArticle);
     }
 
