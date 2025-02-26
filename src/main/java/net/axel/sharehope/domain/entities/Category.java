@@ -23,10 +23,18 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String categoryName;
 
     private String description;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<Action> actions = new ArrayList<>();
+
+    public static Category createCategory(String categoryName, String description) {
+        Category category = new Category();
+        category.categoryName = categoryName;
+        category.description  = description;
+        return category;
+    }
 }
