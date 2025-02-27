@@ -10,8 +10,8 @@ import net.axel.sharehope.domain.dtos.article.UpdateArticleDTO;
 import net.axel.sharehope.security.domain.entity.AppUser;
 
 import java.time.Instant;
-import java.util.Optional;
-import java.util.function.Consumer;
+
+import static net.axel.sharehope.util.UpdateUtils.updateField;
 
 @Entity
 @Table(name = "articles")
@@ -53,11 +53,5 @@ public class Article {
         updateField(updateDto.title(), this.title, newValue -> this.title = newValue);
         updateField(updateDto.description(), this.description, newValue -> this.description = newValue);
         updateField(updateDto.content(), this.content, newValue -> this.content = newValue);
-    }
-
-    private <T> void updateField(T newValue, T currentValue, Consumer<T> setter) {
-        if (newValue != null && !newValue.equals(currentValue)) {
-            setter.accept(newValue);
-        }
     }
 }
