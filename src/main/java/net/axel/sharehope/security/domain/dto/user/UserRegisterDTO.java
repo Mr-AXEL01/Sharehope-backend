@@ -5,7 +5,7 @@ import net.axel.sharehope.security.domain.entity.AppUser;
 import net.axel.sharehope.validation.IsUnique;
 import org.springframework.web.multipart.MultipartFile;
 
-public record UserRequestDTO(
+public record UserRegisterDTO(
 
         @IsUnique(entityClass = AppUser.class, fieldName = "email", message = "email already taken.")
         @NotBlank String email,
