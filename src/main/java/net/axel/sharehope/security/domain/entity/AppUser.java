@@ -46,4 +46,14 @@ public class AppUser {
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
     private List<Article> articles = new ArrayList<>();
+
+    public static AppUser register(String username, String email, String password, String phone, Set<AppRole> roles) {
+        AppUser newUser  = new AppUser();
+        newUser.username = username;
+        newUser.email    = email;
+        newUser.password = password;
+        newUser.phone    = phone;
+        newUser.roles    = roles;
+        return newUser;
+    }
 }
