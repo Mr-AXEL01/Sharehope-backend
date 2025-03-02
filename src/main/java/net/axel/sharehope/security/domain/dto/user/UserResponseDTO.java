@@ -12,6 +12,7 @@ public record UserResponseDTO(
         String email,
         String phone,
         Set<RoleResponseDTO> roles,
-        List<ArticleEmbeddedDTO> articles
+        List<ArticleEmbeddedDTO> articles,
+        String avatar
 ) {
 }
