@@ -4,3 +4,19 @@ spring:
 
   profiles:
     active: dev
+
+  servlet:
+    multipart:
+      enabled: true
+      max-request-size: 10MB
+      max-file-size: 10MB
+
+
+app:
+  cloudinary:
+    url: ${CLOUDINARY_URL}
+    upload:
+      base-folder: "shareHope"
+
+  default:
+    avatar-url: "https://res.cloudinary.com/dofubyjcd/image/upload/v1741048199/shareHope/users/DefaultAvatar.jpg"
