@@ -29,4 +29,14 @@ public class Attachment {
     private Long attachableId;
 
     private String attachableType;
+
+    public static Attachment createAttachment(String filePath, String fileType, Long attachableId, String attachableType) {
+        Attachment attachment = new Attachment();
+        attachment.filePath = filePath;
+        attachment.fileType = fileType;
+        attachment.uploadDate = Instant.now();
+        attachment.attachableId = attachableId;
+        attachment.attachableType = attachableType;
+        return attachment;
+    }
 }
