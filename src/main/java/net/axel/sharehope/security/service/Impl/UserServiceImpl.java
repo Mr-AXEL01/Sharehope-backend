@@ -1,8 +1,9 @@
 package net.axel.sharehope.security.service.Impl;
 
 import lombok.RequiredArgsConstructor;
-import net.axel.sharehope.mapper.AppUserMapper;
-import net.axel.sharehope.security.domain.dto.role.RoleResponseDTO;
+import net.axel.sharehope.domain.dtos.attachment.AttachmentRequestDTO;
+import net.axel.sharehope.domain.dtos.attachment.AttachmentResponseDTO;
+import net.axel.sharehope.mapper.UserMapper;
 import net.axel.sharehope.security.domain.dto.user.UserRegisterDTO;
 import net.axel.sharehope.security.domain.dto.user.UserResponseDTO;
 import net.axel.sharehope.security.domain.entity.AppRole;
@@ -24,8 +25,10 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
+    private static final String DEFAULT_AVATAR_URL = "https://res.cloudinary.com/dofubyjcd/image/upload/v1741048199/shareHope/users/DefaultAvatar.jpg";
+
     private final AppUserRepository repository;
-    private final AppUserMapper mapper;
+    private final UserMapper mapper;
     private final RoleService roleService;
     private final AttachmentService attachmentService;
     private final PasswordEncoder passwordEncoder;
@@ -36,16 +39,26 @@ public class UserServiceImpl implements UserService {
         String username = generateUsername(registerDTO.email());
         String password = passwordEncoder.encode(registerDTO.password());
 
-        Set<AppRole> roles = new HashSet<>();
         AppRole defaultRole = roleService.findByRole("ROLE_USER");
-        roles.add(defaultRole);
+        Set<AppRole> roles = Set.of(defaultRole);
 
         AppUser newUser = AppUser.register(username, registerDTO.email(), password, registerDTO.phone(), roles);
         AppUser savedUser = repository.save(newUser);
 
-//        TODO: handel the avatar for the new user.
+        if (registerDTO.avatar() != null && !registerDTO.avatar().isEmpty()) {
+            AttachmentRequestDTO requestDTO = new AttachmentRequestDTO(
+                    registerDTO.avatar(),
+                    "AppUser",
+                    savedUser.getId(),
+                    "users/avatars"
+            );
+            AttachmentResponseDTO Attachment = attachmentService.createAttachment(requestDTO);
+            savedUser.setAvatar(Attachment.filePath());
+        }else {
+            savedUser.setAvatar(DEFAULT_AVATAR_URL);
+        }
 
-        return mapper.toResponse(savedUser);
+        return mapper.mapToResponseDTO(savedUser);
     }
 
     private String generateUsername(String email) {
