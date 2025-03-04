@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.axel.sharehope.domain.entities.Article;
+import net.axel.sharehope.domain.entities.Attachment;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -46,6 +47,9 @@ public class AppUser {
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
     private List<Article> articles = new ArrayList<>();
+
+    @Transient
+    private String avatar;
 
     public static AppUser register(String username, String email, String password, String phone, Set<AppRole> roles) {
         AppUser newUser  = new AppUser();
