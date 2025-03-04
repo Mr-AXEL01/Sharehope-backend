@@ -5,7 +5,7 @@ import java.time.Instant;
 /**
  * Projection for {@link net.axel.sharehope.domain.entities.Attachment}
  */
-public interface AttachmentResponseDTO {
+public interface AttachmentProjectionDTO {
     Long getId();
 
     String getFilePath();
