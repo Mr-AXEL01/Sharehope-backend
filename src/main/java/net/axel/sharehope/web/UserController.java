@@ -2,6 +2,8 @@ package net.axel.sharehope.web;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import net.axel.sharehope.security.domain.dto.user.AuthenticationResponseDTO;
+import net.axel.sharehope.security.domain.dto.user.UserLoginDTO;
 import net.axel.sharehope.security.domain.dto.user.UserRegisterDTO;
 import net.axel.sharehope.security.domain.dto.user.UserResponseDTO;
 import net.axel.sharehope.security.service.UserService;
@@ -22,6 +24,12 @@ public class UserController {
     public ResponseEntity<UserResponseDTO> register(@ModelAttribute @Valid UserRegisterDTO requestDTO) {
         UserResponseDTO newUser = service.register(requestDTO);
         return ResponseEntity.ok(newUser);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<AuthenticationResponseDTO> login(@Valid @RequestBody UserLoginDTO loginDTO) {
+        var user = service.login(loginDTO);
+        return ResponseEntity.ok(user);
     }
 
 }
