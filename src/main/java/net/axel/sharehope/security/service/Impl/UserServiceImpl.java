@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import net.axel.sharehope.domain.dtos.attachment.AttachmentRequestDTO;
 import net.axel.sharehope.domain.dtos.attachment.AttachmentResponseDTO;
 import net.axel.sharehope.mapper.UserMapper;
+import net.axel.sharehope.security.domain.dto.user.AuthenticationResponseDTO;
+import net.axel.sharehope.security.domain.dto.user.UserLoginDTO;
 import net.axel.sharehope.security.domain.dto.user.UserRegisterDTO;
 import net.axel.sharehope.security.domain.dto.user.UserResponseDTO;
 import net.axel.sharehope.security.domain.entity.AppRole;
@@ -12,6 +14,9 @@ import net.axel.sharehope.security.repository.AppUserRepository;
 import net.axel.sharehope.security.service.RoleService;
 import net.axel.sharehope.security.service.UserService;
 import net.axel.sharehope.service.AttachmentService;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +37,8 @@ public class UserServiceImpl implements UserService {
     private final RoleService roleService;
     private final AttachmentService attachmentService;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authManager;
+    private final JWTService jwtService;
 
 
     @Override
@@ -59,6 +66,22 @@ public class UserServiceImpl implements UserService {
         }
 
         return mapper.mapToResponseDTO(savedUser);
+    }
+
+    @Override
+    public AuthenticationResponseDTO login(UserLoginDTO loginDTO) {
+        Authentication authentication = authManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginDTO.username(),
+                        loginDTO.password()
+                )
+        );
+
+        String authenticatedUsername = authentication.getName();
+
+        var token = jwtService.generateToken(authenticatedUsername);
+
+        return new AuthenticationResponseDTO(token);
     }
 
     private String generateUsername(String email) {
