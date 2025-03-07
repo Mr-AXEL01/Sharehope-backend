@@ -1,10 +1,7 @@
 package net.axel.sharehope.domain.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.Instant;
 
@@ -20,14 +17,19 @@ public class Attachment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "filepath", nullable = false)
     private String filePath;
 
+    @Column(name = "filetype")
     private String fileType;
 
+    @Column(name = "uploaddate")
     private Instant uploadDate;
 
+    @Column(name = "attachableid")
     private Long attachableId;
 
+    @Column(name = "attachabletype")
     private String attachableType;
 
     public static Attachment createAttachment(String filePath, String fileType, Long attachableId, String attachableType) {
