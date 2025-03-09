@@ -11,12 +11,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(UserController.CONTROLLER_PATH)
+@RequestMapping(AuthController.CONTROLLER_PATH)
 
 @RequiredArgsConstructor
-public class UserController {
+public class AuthController {
 
-    public final static String CONTROLLER_PATH = "api/v1";
+    public final static String CONTROLLER_PATH = "api/v1/auth";
 
     private final UserService service;
 
