@@ -25,6 +25,14 @@ public class SecurityConfig {
 
     private static final String PREFIX = "/api/v1";
 
+    private static final String[] FREE_LIST = {
+            "/swagger-ui/**",
+            "/v3/api-docs/**",
+            "/swagger-resources/**",
+            "/webjars/**",
+            PREFIX+"/auth/**",
+    };
+
     private final CustomUserDetailsService customUserDetailsService;
     private final JwtFilter jwtFilter;
 
@@ -33,7 +41,7 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers(PREFIX+"/", PREFIX+"/register", PREFIX+"/login").permitAll()
+                        .requestMatchers(FREE_LIST).permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(
                         session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
