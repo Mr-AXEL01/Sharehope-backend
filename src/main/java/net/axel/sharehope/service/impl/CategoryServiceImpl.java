@@ -1,17 +1,18 @@
 package net.axel.sharehope.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import net.axel.sharehope.domain.dtos.attachment.AttachmentRequestDTO;
+import net.axel.sharehope.domain.dtos.attachment.AttachmentResponseDTO;
 import net.axel.sharehope.domain.dtos.category.CategoryProjectionDTO;
 import net.axel.sharehope.domain.dtos.category.CategoryRequestDTO;
 import net.axel.sharehope.domain.dtos.category.CategoryResponseDTO;
-import net.axel.sharehope.domain.entities.Article;
+import net.axel.sharehope.domain.entities.Attachment;
 import net.axel.sharehope.domain.entities.Category;
 import net.axel.sharehope.exception.domains.ResourceNotFoundException;
 import net.axel.sharehope.mapper.CategoryMapper;
 import net.axel.sharehope.repository.CategoryRepository;
+import net.axel.sharehope.service.AttachmentService;
 import net.axel.sharehope.service.CategoryService;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,39 +24,72 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
 
+    private static final String DEFAULT_CATEGORY_ICON = "https://res.cloudinary.com/dofubyjcd/image/upload/v1741649439/shareHope/categories/icons/defaultCategoryIcon.png";
+
     private final CategoryRepository repository;
     private final CategoryMapper mapper;
+    private final AttachmentService attachmentService;
 
 
     @Override
-    public List<CategoryProjectionDTO> findAll() {
-        return repository.findAllCategoryByOrderByIdDesc();
+    public List<CategoryResponseDTO> findAll() {
+        List<CategoryProjectionDTO> categories = repository.findAllCategoryByOrderByIdDesc();
+
+        return categories.stream()
+                .map(category -> {
+                    String icon = attachmentService.findAttachmentUrl("Category", category.getId());
+                    if (icon == null) icon = DEFAULT_CATEGORY_ICON;
+                    return mapper.fromProjectionToResponse(category, icon);
+                })
+                .toList();
     }
 
     @Override
-    public CategoryProjectionDTO findById(Long id) {
-        return repository.findCategoryById(id)
-                .orElseThrow(()-> new ResourceNotFoundException("Category", id));
+    public CategoryResponseDTO findById(Long id) {
+        CategoryProjectionDTO category = repository.findCategoryById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Category", id));
+
+        String icon = attachmentService.findAttachmentUrl("Category", category.getId());
+        if (icon == null) icon = DEFAULT_CATEGORY_ICON;
+        return mapper.fromProjectionToResponse(category, icon);
     }
 
     @Override
     public CategoryResponseDTO create(CategoryRequestDTO requestDTO) {
         Category category = Category.createCategory(requestDTO.categoryName(), requestDTO.description());
-
-//        TODO: handle the add of an icon with the polymorphic to store it in attachments.
-
         Category savedCategory = repository.save(category);
-        return mapper.toResponse(savedCategory);
+
+        return getCategoryResponseDTO(requestDTO, savedCategory, DEFAULT_CATEGORY_ICON);
     }
 
     @Override
     public CategoryResponseDTO update(Long id, CategoryRequestDTO requestDTO) {
         Category existingCategory = getCategoryById(id);
         existingCategory.upadteCategory(requestDTO);
+        String icon;
+        if (existingCategory.getIcon() != null && !existingCategory.getIcon().isEmpty()) {
+            icon = existingCategory.getIcon();
+        } else {
+            icon = DEFAULT_CATEGORY_ICON;
+        }
 
-//        TODO: update the icon.
+        return getCategoryResponseDTO(requestDTO, existingCategory, icon);
+    }
 
-        return mapper.toResponse(existingCategory);
+    private CategoryResponseDTO getCategoryResponseDTO(CategoryRequestDTO requestDTO, Category category, String icon) {
+        if (requestDTO.icon() != null && !requestDTO.icon().isEmpty()) {
+            AttachmentRequestDTO iconDTO = new AttachmentRequestDTO(
+                    requestDTO.icon(),
+                    "Category",
+                    category.getId(),
+                    "categories/icons"
+            );
+            AttachmentResponseDTO attachment = attachmentService.createAttachment(iconDTO);
+            icon = attachment.filePath();
+            category.setIcon(icon);
+        }
+
+        return mapper.fromEntityToResponse(category, icon);
     }
 
     @Override
@@ -63,6 +97,12 @@ public class CategoryServiceImpl implements CategoryService {
         if(!repository.existsById(id)) {
             throw new ResourceNotFoundException("There is no category to remove with the ID: " + id);
         }
+
+        Attachment attachment = attachmentService.findAttachment("Category", id);
+        if (attachment != null) {
+            attachmentService.deleteAttachment(attachment.getId(), "categories/icons/");
+        }
+
         repository.deleteById(id);
     }
 
