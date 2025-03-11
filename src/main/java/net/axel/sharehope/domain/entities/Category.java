@@ -31,6 +31,9 @@ public class Category {
 
     private String description;
 
+    @Transient
+    private String icon;
+
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<Action> actions = new ArrayList<>();
 
