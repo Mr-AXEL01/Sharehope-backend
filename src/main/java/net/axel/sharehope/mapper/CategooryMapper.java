@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring", uses = { ActionMapper.class })
-public interface CategoryMapper extends BaseMapper<Category, CategoryRequestDTO, CategoryResponseDTO> {
+public interface CategooryMapper extends BaseMapper<Category, CategoryRequestDTO, CategoryResponseDTO> {
 
     @Mapping(target = "actions", source = "actions")
     @Override
