@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import net.axel.sharehope.domain.dtos.attachment.AttachmentRequestDTO;
 import net.axel.sharehope.domain.dtos.attachment.AttachmentResponseDTO;
 import net.axel.sharehope.domain.entities.Attachment;
+import net.axel.sharehope.exception.domains.ResourceNotFoundException;
 import net.axel.sharehope.mapper.AttachmentMapper;
 import net.axel.sharehope.repository.AttachmentRepository;
 import net.axel.sharehope.service.AttachmentService;
@@ -30,8 +31,40 @@ public class AttachmentServiceImpl implements AttachmentService {
     }
 
     @Override
-    public String findAttachment(String attachableType, Long attachableId) {
-        Attachment attachment = repository.findByAttachableTypeAndAttachableId(attachableType, attachableId);
-        return attachment.getFilePath();
+    public String findAttachmentUrl(String attachableType, Long attachableId) {
+        return repository.findByAttachableTypeAndAttachableId(attachableType, attachableId)
+                .map(Attachment::getFilePath)
+                .orElse(null);
+    }
+
+    @Override
+    public Attachment findAttachment(String attachableType, Long attachableId) {
+        return repository.findByAttachableTypeAndAttachableId(attachableType, attachableId)
+                .orElseThrow(() -> new ResourceNotFoundException("Can't find the attachment of " + attachableType + " with the ID :"+ attachableId));
+    }
+
+    @Override
+    public void deleteAttachment(Long attachmentId, String folderPath) {
+        Attachment attachment = repository.findById(attachmentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Attachment", attachmentId));
+
+        String fileUrl = attachment.getFilePath();
+        String publicId = "shareHope/"+ folderPath + extractPublicIdFromUrl(fileUrl);
+
+        fileUploader.delete(publicId, attachment.getFileType());
+
+        repository.delete(attachment);
+    }
+
+
+    private String extractPublicIdFromUrl(String fileUrl) {
+        if (fileUrl == null || fileUrl.isEmpty()) {
+            return null;
+        }
+
+        String[] parts = fileUrl.split("/");
+        String lastPart = parts[parts.length - 1];
+        int dotIndex = lastPart.lastIndexOf('.');
+        return (dotIndex != -1) ? lastPart.substring(0, dotIndex) : lastPart;
     }
 }
