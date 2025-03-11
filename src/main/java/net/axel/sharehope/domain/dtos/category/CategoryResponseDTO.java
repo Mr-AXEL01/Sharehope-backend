@@ -8,6 +8,7 @@ public record CategoryResponseDTO(
         Long id,
         String categoryName,
         String description,
-        List<ActionEmbeddedDTO> actions
+        List<ActionEmbeddedDTO> actions,
+        String icon
 ) {
 }
