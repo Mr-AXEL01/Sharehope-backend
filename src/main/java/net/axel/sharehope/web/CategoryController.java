@@ -8,6 +8,7 @@ import net.axel.sharehope.domain.dtos.category.CategoryResponseDTO;
 import net.axel.sharehope.service.CategoryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,21 +23,22 @@ public class CategoryController {
 
     private final CategoryService service;
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
-    public ResponseEntity<CategoryResponseDTO> create(@RequestBody @Valid CategoryRequestDTO requestDTO) {
+    public ResponseEntity<CategoryResponseDTO> create(@ModelAttribute @Valid CategoryRequestDTO requestDTO) {
         CategoryResponseDTO category = service.create(requestDTO);
         return new ResponseEntity<>(category, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<CategoryProjectionDTO>> findAll() {
-        List<CategoryProjectionDTO> categories = service.findAll();
+    public ResponseEntity<List<CategoryResponseDTO>> findAll() {
+        List<CategoryResponseDTO> categories = service.findAll();
         return ResponseEntity.ok(categories);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CategoryProjectionDTO> findById(@PathVariable("id") Long id) {
-        CategoryProjectionDTO category = service.findById(id);
+    public ResponseEntity<CategoryResponseDTO> findById(@PathVariable("id") Long id) {
+        CategoryResponseDTO category = service.findById(id);
         return new ResponseEntity<>(category, HttpStatus.OK);
     }
 
@@ -49,6 +51,7 @@ public class CategoryController {
         return ResponseEntity.ok(updatedCategory);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
         service.delete(id);
