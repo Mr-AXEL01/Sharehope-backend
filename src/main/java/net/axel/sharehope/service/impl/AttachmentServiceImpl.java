@@ -40,7 +40,7 @@ public class AttachmentServiceImpl implements AttachmentService {
     @Override
     public Attachment findAttachment(String attachableType, Long attachableId) {
         return repository.findByAttachableTypeAndAttachableId(attachableType, attachableId)
-                .orElseThrow(() -> new ResourceNotFoundException("Can't find the attachment of " + attachableType + " with the ID :"+ attachableId));
+                .orElse(null);
     }
 
     @Override
