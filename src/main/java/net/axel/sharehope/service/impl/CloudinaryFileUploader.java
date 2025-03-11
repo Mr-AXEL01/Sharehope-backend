@@ -36,6 +36,24 @@ public class CloudinaryFileUploader implements FileUploader {
         }
     }
 
+    @Override
+    public void delete(String publicId, String folderType) {
+        try {
+            String resourceType = determineResourceType(folderType);
+            Map<String, Object> options = ObjectUtils.asMap(
+                    "resource_type", resourceType,
+                    "invalidate", true
+            );
+            Map<?, ?> response = cloudinary.uploader().destroy(publicId, options);
+
+            Object result = response.get("result");
+            if (result == null || !"ok".equalsIgnoreCase(result.toString())) {
+                throw new FileUploadException("Failed to delete file from Cloudinary: " + response);
+            }
+        } catch (Exception e) {
+            throw new FileUploadException("Failed to delete file from Cloudinary: " + e.getMessage(), e);
+        }
+    }
 
     private void validateFile(MultipartFile file) {
         if (file == null || file.isEmpty()) {
@@ -43,6 +61,20 @@ public class CloudinaryFileUploader implements FileUploader {
         }
         if (file.getSize() > 10 * 1024 * 1024) {
             throw new FileUploadException("File size exceeds 10MB");
+        }
+    }
+
+    private String determineResourceType(String folderType) {
+        if (folderType == null || folderType.isEmpty()) {
+            return "raw";
+        }
+        String lower = folderType.toLowerCase();
+        if (lower.startsWith("image")) {
+            return "image";
+        } else if (lower.startsWith("video")) {
+            return "video";
+        } else {
+            return "raw";
         }
     }
 }
