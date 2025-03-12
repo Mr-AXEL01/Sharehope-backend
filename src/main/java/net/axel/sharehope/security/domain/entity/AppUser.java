@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import net.axel.sharehope.domain.entities.Action;
 import net.axel.sharehope.domain.entities.Article;
 import net.axel.sharehope.domain.entities.Attachment;
 
@@ -47,6 +48,9 @@ public class AppUser {
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
     private List<Article> articles = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Action> actions = new ArrayList<>();
 
     @Transient
     private String avatar;
