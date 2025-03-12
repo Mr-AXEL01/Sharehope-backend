@@ -21,6 +21,9 @@ spring:
   flyway:
     locations: classpath:db/migration
 
+stripe:
+  apikey: ${STRIPE_SECRET_KEY}
+
 
 logging:
   level:
