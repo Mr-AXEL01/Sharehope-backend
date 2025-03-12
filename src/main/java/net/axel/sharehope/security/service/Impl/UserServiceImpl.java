@@ -3,6 +3,7 @@ package net.axel.sharehope.security.service.Impl;
 import lombok.RequiredArgsConstructor;
 import net.axel.sharehope.domain.dtos.attachment.AttachmentRequestDTO;
 import net.axel.sharehope.domain.dtos.attachment.AttachmentResponseDTO;
+import net.axel.sharehope.exception.domains.ResourceNotFoundException;
 import net.axel.sharehope.mapper.UserMapper;
 import net.axel.sharehope.security.domain.dto.user.AuthenticationResponseDTO;
 import net.axel.sharehope.security.domain.dto.user.UserLoginDTO;
@@ -81,6 +82,15 @@ public class UserServiceImpl implements UserService {
         var token = jwtService.generateToken(userDetails);
 
         return new AuthenticationResponseDTO(token);
+    }
+
+    @Override
+    public AppUser findUserEntity(String username) {
+        AppUser user = repository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("Can't find the user with username: " + username));
+        user.setAvatar(DEFAULT_AVATAR_URL);
+
+        return user;
     }
 
     private String generateUsername(String email) {
