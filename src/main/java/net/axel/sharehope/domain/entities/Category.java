@@ -44,7 +44,7 @@ public class Category {
         return category;
     }
 
-    public void upadteCategory(CategoryRequestDTO requestDTO) {
+    public void updateCategory(CategoryRequestDTO requestDTO) {
         updateField(requestDTO.categoryName(), this.categoryName, newValue -> this.categoryName = newValue);
         updateField(requestDTO.description(), this.description, newValue -> this.description = newValue);
     }
