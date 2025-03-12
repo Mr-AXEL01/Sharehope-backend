@@ -55,6 +55,16 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public Category findEntityById(Long id) {
+        Category category = getCategoryById(id);
+
+        String icon = attachmentService.findAttachmentUrl("Category", category.getId());
+        if (icon == null) icon = DEFAULT_CATEGORY_ICON;
+        category.setIcon(icon);
+        return category;
+    }
+
+    @Override
     public CategoryResponseDTO create(CategoryRequestDTO requestDTO) {
         Category category = Category.createCategory(requestDTO.categoryName(), requestDTO.description());
         Category savedCategory = repository.save(category);
@@ -65,7 +75,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryResponseDTO update(Long id, CategoryRequestDTO requestDTO) {
         Category existingCategory = getCategoryById(id);
-        existingCategory.upadteCategory(requestDTO);
+        existingCategory.updateCategory(requestDTO);
         String icon;
         if (existingCategory.getIcon() != null && !existingCategory.getIcon().isEmpty()) {
             icon = existingCategory.getIcon();
