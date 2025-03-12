@@ -4,6 +4,7 @@ public record UserEmbeddedDTO(
         Long id,
         String username,
         String email,
-        String phone
+        String phone,
+        String avatar
 ) {
 }
