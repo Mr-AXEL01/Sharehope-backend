@@ -88,7 +88,9 @@ public class UserServiceImpl implements UserService {
     public AppUser findUserEntity(String username) {
         AppUser user = repository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("Can't find the user with username: " + username));
-        user.setAvatar(DEFAULT_AVATAR_URL);
+
+        String avatar = attachmentService.findAttachmentUrl("AppUser", user.getId());
+        user.setAvatar(avatar != null ? avatar : DEFAULT_AVATAR_URL);
 
         return user;
     }
