@@ -12,6 +12,8 @@ import net.axel.sharehope.service.FileUploader;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 
@@ -38,9 +40,24 @@ public class AttachmentServiceImpl implements AttachmentService {
     }
 
     @Override
+    public List<String> findAttachmentUrls(String attachableType, Long attachableId) {
+        return repository.findAllByAttachableTypeAndAttachableId(attachableType, attachableId)
+                .stream()
+                .map(Attachment::getFilePath)
+                .toList();
+    }
+
+    @Override
     public Attachment findAttachment(String attachableType, Long attachableId) {
         return repository.findByAttachableTypeAndAttachableId(attachableType, attachableId)
                 .orElse(null);
+    }
+
+    @Override
+    public List<Attachment> findAttachments(String attachableType, Long attachableId) {
+        return repository.findAllByAttachableTypeAndAttachableId(attachableType, attachableId)
+                .stream()
+                .toList();
     }
 
     @Override
