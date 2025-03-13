@@ -37,4 +37,9 @@ public class Donation extends Action {
         donation.donationStatus = DonationStatus.PENDING;
         return donation;
     }
+
+    public void updateDonation(String description, Category category) {
+        this.setDescription(description);
+        this.setCategory(category);
+    }
 }
