@@ -4,6 +4,7 @@ import com.stripe.exception.StripeException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import net.axel.sharehope.domain.dtos.action.ActionCreateDTO;
+import net.axel.sharehope.domain.dtos.action.ActionStatusDTO;
 import net.axel.sharehope.domain.dtos.action.ActionUpdateDTO;
 import net.axel.sharehope.domain.dtos.action.donation.DonationResponseDTO;
 import net.axel.sharehope.service.DonationService;
@@ -38,6 +39,16 @@ public class DonationController {
         DonationResponseDTO updatedDonation = service.update(id, dto);
         return ResponseEntity.ok(updatedDonation);
     }
+
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<DonationResponseDTO> updateStatus(
+            @PathVariable("id") Long id,
+            @Valid @RequestBody ActionStatusDTO statusDTO
+    ) {
+        DonationResponseDTO updatedDonation = service.updateStatus(id, statusDTO);
+        return ResponseEntity.ok(updatedDonation);
+    }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<DonationResponseDTO> findById(@PathVariable("id") Long id) {

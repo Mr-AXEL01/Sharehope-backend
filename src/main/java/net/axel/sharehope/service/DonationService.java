@@ -2,6 +2,7 @@ package net.axel.sharehope.service;
 
 import com.stripe.exception.StripeException;
 import net.axel.sharehope.domain.dtos.action.ActionCreateDTO;
+import net.axel.sharehope.domain.dtos.action.ActionStatusDTO;
 import net.axel.sharehope.domain.dtos.action.ActionUpdateDTO;
 import net.axel.sharehope.domain.dtos.action.donation.DonationResponseDTO;
 
@@ -19,7 +20,7 @@ public interface DonationService {
 
     DonationResponseDTO update(Long id, ActionUpdateDTO dto);
 
-//    TODO: the update of status
+    DonationResponseDTO updateStatus(Long id, ActionStatusDTO statusDTO);
 
     void delete(Long id);
 }

@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import net.axel.sharehope.domain.dtos.action.ActionStatusDTO;
 import net.axel.sharehope.domain.enums.DonationStatus;
 import net.axel.sharehope.security.domain.entity.AppUser;
 
@@ -41,5 +42,14 @@ public class Donation extends Action {
     public void updateDonation(String description, Category category) {
         this.setDescription(description);
         this.setCategory(category);
+    }
+
+    public void updateStatus(ActionStatusDTO statusDTO) {
+        switch (statusDTO.status()) {
+            case "PENDING" -> this.donationStatus = DonationStatus.PENDING;
+            case "CONFIRMED" -> this.donationStatus = DonationStatus.CONFIRMED;
+            case "DELIVERED" -> this.donationStatus = DonationStatus.DELIVERED;
+            default -> throw new IllegalArgumentException("Invalid donation status");
+        }
     }
 }

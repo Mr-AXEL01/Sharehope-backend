@@ -4,6 +4,7 @@ import com.stripe.exception.StripeException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.axel.sharehope.domain.dtos.action.ActionCreateDTO;
+import net.axel.sharehope.domain.dtos.action.ActionStatusDTO;
 import net.axel.sharehope.domain.dtos.action.ActionUpdateDTO;
 import net.axel.sharehope.domain.dtos.action.donation.DonationResponseDTO;
 import net.axel.sharehope.domain.dtos.attachment.AttachmentRequestDTO;
@@ -114,6 +115,15 @@ public class DonationServiceImpl implements DonationService {
             existingDonation.setAttachments(attachments);
         }
         return mapper.toResponse(existingDonation);
+    }
+
+    public DonationResponseDTO updateStatus(Long id, ActionStatusDTO statusDTO) {
+        Donation donation = getDonation(id);
+        donation.updateStatus(statusDTO);
+        donation.setUser(getUser(donation.getUser().getUsername()));
+        List<String> attachments = attachmentService.findAttachmentUrls("Donation", id);
+        donation.setAttachments(attachments);
+        return mapper.toResponse(donation);
     }
 
     @Override
