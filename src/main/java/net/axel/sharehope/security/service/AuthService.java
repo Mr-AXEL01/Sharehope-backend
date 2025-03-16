@@ -6,11 +6,9 @@ import net.axel.sharehope.security.domain.dto.user.UserRegisterDTO;
 import net.axel.sharehope.security.domain.dto.user.UserResponseDTO;
 import net.axel.sharehope.security.domain.entity.AppUser;
 
-public interface UserService {
+public interface AuthService {
 
     UserResponseDTO register(UserRegisterDTO registerDTO);
 
     AuthenticationResponseDTO login(UserLoginDTO loginDTO);
-
-    AppUser findUserEntity(String username);
 }

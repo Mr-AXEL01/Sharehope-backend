@@ -6,7 +6,7 @@ import net.axel.sharehope.security.domain.dto.user.AuthenticationResponseDTO;
 import net.axel.sharehope.security.domain.dto.user.UserLoginDTO;
 import net.axel.sharehope.security.domain.dto.user.UserRegisterDTO;
 import net.axel.sharehope.security.domain.dto.user.UserResponseDTO;
-import net.axel.sharehope.security.service.UserService;
+import net.axel.sharehope.security.service.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +18,7 @@ public class AuthController {
 
     public final static String CONTROLLER_PATH = "api/v1/auth";
 
-    private final UserService service;
+    private final AuthService service;
 
     @PostMapping("/register")
     public ResponseEntity<UserResponseDTO> register(@ModelAttribute @Valid UserRegisterDTO requestDTO) {

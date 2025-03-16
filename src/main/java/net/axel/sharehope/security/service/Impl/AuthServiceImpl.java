@@ -12,8 +12,8 @@ import net.axel.sharehope.security.domain.dto.user.UserResponseDTO;
 import net.axel.sharehope.security.domain.entity.AppRole;
 import net.axel.sharehope.security.domain.entity.AppUser;
 import net.axel.sharehope.security.repository.AppUserRepository;
+import net.axel.sharehope.security.service.AuthService;
 import net.axel.sharehope.security.service.RoleService;
-import net.axel.sharehope.security.service.UserService;
 import net.axel.sharehope.service.AttachmentService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,7 +29,7 @@ import java.util.Set;
 @Transactional
 
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService {
+public class AuthServiceImpl implements AuthService {
 
     private static final String DEFAULT_AVATAR_URL = "https://res.cloudinary.com/dofubyjcd/image/upload/v1741048199/shareHope/users/DefaultAvatar.jpg";
 
@@ -82,17 +82,6 @@ public class UserServiceImpl implements UserService {
         var token = jwtService.generateToken(userDetails);
 
         return new AuthenticationResponseDTO(token);
-    }
-
-    @Override
-    public AppUser findUserEntity(String username) {
-        AppUser user = repository.findByUsername(username)
-                .orElseThrow(() -> new ResourceNotFoundException("Can't find the user with username: " + username));
-
-        String avatar = attachmentService.findAttachmentUrl("AppUser", user.getId());
-        user.setAvatar(avatar != null ? avatar : DEFAULT_AVATAR_URL);
-
-        return user;
     }
 
     private String generateUsername(String email) {
