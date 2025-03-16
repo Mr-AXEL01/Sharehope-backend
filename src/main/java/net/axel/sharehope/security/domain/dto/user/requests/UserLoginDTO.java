@@ -1,4 +1,4 @@
-package net.axel.sharehope.security.domain.dto.user;
+package net.axel.sharehope.security.domain.dto.user.requests;
 
 import jakarta.validation.constraints.NotBlank;
 

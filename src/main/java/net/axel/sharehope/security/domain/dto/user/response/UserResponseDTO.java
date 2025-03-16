@@ -1,4 +1,4 @@
-package net.axel.sharehope.security.domain.dto.user;
+package net.axel.sharehope.security.domain.dto.user.response;
 
 import net.axel.sharehope.domain.dtos.article.ArticleEmbeddedDTO;
 import net.axel.sharehope.security.domain.dto.role.RoleResponseDTO;

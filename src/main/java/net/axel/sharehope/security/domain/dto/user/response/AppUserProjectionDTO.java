@@ -1,4 +1,4 @@
-package net.axel.sharehope.security.domain.dto.user;
+package net.axel.sharehope.security.domain.dto.user.response;
 
 import java.time.Instant;
 import java.util.List;
