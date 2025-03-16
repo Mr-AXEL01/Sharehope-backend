@@ -8,12 +8,14 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.axel.sharehope.domain.entities.Action;
 import net.axel.sharehope.domain.entities.Article;
-import net.axel.sharehope.domain.entities.Attachment;
+import net.axel.sharehope.security.domain.dto.user.requests.UserUpdateDTO;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static net.axel.sharehope.util.UpdateUtils.updateField;
 
 @Entity
 @Table(name = "users")
@@ -23,7 +25,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class AppUser {
+public class AppUser implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -63,5 +65,38 @@ public class AppUser {
         newUser.phone    = phone;
         newUser.roles    = roles;
         return newUser;
+    }
+
+    public void updateUser(UserUpdateDTO updateDTO) {
+        updateField(updateDTO.username(), this.username, newValue -> this.username = newValue);
+        updateField(updateDTO.email(), this.email, newValue -> this.email = newValue);
+        updateField(updateDTO.phone(), this.phone, newValue -> this.phone = newValue);
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles.stream()
+                .map(role -> (GrantedAuthority) role::getRole)
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return UserDetails.super.isAccountNonExpired();
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return UserDetails.super.isAccountNonLocked();
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return UserDetails.super.isCredentialsNonExpired();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return UserDetails.super.isEnabled();
     }
 }
