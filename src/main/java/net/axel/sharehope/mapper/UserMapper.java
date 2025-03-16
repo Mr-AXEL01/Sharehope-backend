@@ -4,7 +4,8 @@ import lombok.RequiredArgsConstructor;
 import net.axel.sharehope.domain.dtos.article.ArticleEmbeddedDTO;
 import net.axel.sharehope.domain.entities.Article;
 import net.axel.sharehope.security.domain.dto.role.RoleResponseDTO;
-import net.axel.sharehope.security.domain.dto.user.UserResponseDTO;
+import net.axel.sharehope.security.domain.dto.user.response.UserAuthResponseDTO;
+import net.axel.sharehope.security.domain.dto.user.response.UserResponseDTO;
 import net.axel.sharehope.security.domain.entity.AppRole;
 import net.axel.sharehope.security.domain.entity.AppUser;
 import org.springframework.stereotype.Component;
@@ -27,6 +28,19 @@ public class UserMapper {
                 mapRoles(appUser.getRoles()),
                 mapArticle(appUser.getArticles()),
                 appUser.getAvatar()
+        );
+    }
+
+    public UserAuthResponseDTO mapToAuthResponseDTO(AppUser appUser, String token) {
+        return new UserAuthResponseDTO(
+                appUser.getId(),
+                appUser.getUsername(),
+                appUser.getEmail(),
+                appUser.getPhone(),
+                mapRoles(appUser.getRoles()),
+                mapArticle(appUser.getArticles()),
+                appUser.getAvatar(),
+                token
         );
     }
 
