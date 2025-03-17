@@ -21,6 +21,12 @@ public class UserController {
 
     private final UserService service;
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<UserResponseDTO> findById(@PathVariable("id") Long id) {
+        UserResponseDTO user = service.findById(id);
+        return ResponseEntity.ok(user);
+    }
+
     @PatchMapping("/{id}/avatar")
     public ResponseEntity<UserResponseDTO> updateAvatar(@PathVariable("id") Long id, MultipartFile avatarUrl) {
         UserResponseDTO updatedUser = service.updateAvatar(id, avatarUrl);
