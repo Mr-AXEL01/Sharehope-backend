@@ -2,10 +2,10 @@ package net.axel.sharehope.web;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import net.axel.sharehope.security.domain.dto.user.AuthenticationResponseDTO;
-import net.axel.sharehope.security.domain.dto.user.UserLoginDTO;
-import net.axel.sharehope.security.domain.dto.user.UserRegisterDTO;
-import net.axel.sharehope.security.domain.dto.user.UserResponseDTO;
+import net.axel.sharehope.security.domain.dto.user.response.AuthenticationResponseDTO;
+import net.axel.sharehope.security.domain.dto.user.requests.UserLoginDTO;
+import net.axel.sharehope.security.domain.dto.user.requests.UserRegisterDTO;
+import net.axel.sharehope.security.domain.dto.user.response.UserResponseDTO;
 import net.axel.sharehope.security.service.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

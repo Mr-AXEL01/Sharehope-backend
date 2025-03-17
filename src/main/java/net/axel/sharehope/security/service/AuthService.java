@@ -1,10 +1,9 @@
 package net.axel.sharehope.security.service;
 
-import net.axel.sharehope.security.domain.dto.user.AuthenticationResponseDTO;
-import net.axel.sharehope.security.domain.dto.user.UserLoginDTO;
-import net.axel.sharehope.security.domain.dto.user.UserRegisterDTO;
-import net.axel.sharehope.security.domain.dto.user.UserResponseDTO;
-import net.axel.sharehope.security.domain.entity.AppUser;
+import net.axel.sharehope.security.domain.dto.user.response.AuthenticationResponseDTO;
+import net.axel.sharehope.security.domain.dto.user.requests.UserLoginDTO;
+import net.axel.sharehope.security.domain.dto.user.requests.UserRegisterDTO;
+import net.axel.sharehope.security.domain.dto.user.response.UserResponseDTO;
 
 public interface AuthService {
 
