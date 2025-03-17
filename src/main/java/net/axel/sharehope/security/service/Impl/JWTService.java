@@ -3,6 +3,8 @@ package net.axel.sharehope.security.service.Impl;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import net.axel.sharehope.security.domain.entity.AppRole;
+import net.axel.sharehope.security.domain.entity.AppUser;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -21,16 +23,20 @@ public class JWTService {
     );
     private static final long EXPIRATION_TIME = 1000 * 60 * 60 * 24;
 
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(AppUser user) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("roles", userDetails.getAuthorities().stream()
-                .map(Object::toString)
-                .collect(Collectors.toList()));
+
+        claims.put("roles", user.getRoles()
+                .stream()
+                .map(AppRole::getRole)
+                .toList()
+        );
+        claims.put("userId", user.getId());
 
         return Jwts.builder()
                 .claims()
                 .add(claims)
-                .subject(userDetails.getUsername())
+                .subject(user.getUsername())
                 .issuer("Mr-AXEL01")
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))

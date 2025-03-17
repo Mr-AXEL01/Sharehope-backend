@@ -76,9 +76,9 @@ public class AuthServiceImpl implements AuthService {
                         loginDTO.password()
                 )
         );
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        AppUser user = (AppUser) authentication.getPrincipal();
 
-        var token = jwtService.generateToken(userDetails);
+        var token = jwtService.generateToken(user);
 
         return new AuthenticationResponseDTO(token);
     }
