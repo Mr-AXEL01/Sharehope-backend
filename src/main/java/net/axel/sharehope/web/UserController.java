@@ -21,15 +21,15 @@ public class UserController {
 
     private final UserService service;
 
-    @PatchMapping("/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<UserResponseDTO> findById(@PathVariable("id") Long id) {
         UserResponseDTO user = service.findById(id);
         return ResponseEntity.ok(user);
     }
 
     @PatchMapping("/{id}/avatar")
-    public ResponseEntity<UserResponseDTO> updateAvatar(@PathVariable("id") Long id, MultipartFile avatarUrl) {
-        UserResponseDTO updatedUser = service.updateAvatar(id, avatarUrl);
+    public ResponseEntity<UserResponseDTO> updateAvatar(@PathVariable("id") Long id, MultipartFile avatar) {
+        UserResponseDTO updatedUser = service.updateAvatar(id, avatar);
         return ResponseEntity.ok(updatedUser);
     }
 

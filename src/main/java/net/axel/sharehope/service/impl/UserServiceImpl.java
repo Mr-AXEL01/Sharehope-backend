@@ -62,16 +62,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDTO updateAvatar(Long id, MultipartFile avatarUrl) {
+    public UserResponseDTO updateAvatar(Long id, MultipartFile avatar) {
         AppUser user = getUser(id);
         Attachment existingAttachment = attachmentService.findAttachment("AppUser", user.getId());
         if (existingAttachment != null) {
             attachmentService.deleteAttachment(existingAttachment.getId(), "users/avatars");
         }
         String avatarPath;
-        if (avatarUrl != null && !avatarUrl.isEmpty()) {
+        if (avatar != null && !avatar.isEmpty()) {
             AttachmentResponseDTO newAvatar = attachmentService.createAttachment(new AttachmentRequestDTO(
-                            avatarUrl,
+                            avatar,
                             "AppUser",
                             user.getId(),
                             "users/avatars"
