@@ -6,8 +6,10 @@ import net.axel.sharehope.domain.dtos.attachment.AttachmentResponseDTO;
 import net.axel.sharehope.domain.entities.Attachment;
 import net.axel.sharehope.exception.domains.ResourceNotFoundException;
 import net.axel.sharehope.mapper.UserMapper;
-import net.axel.sharehope.security.domain.dto.user.UserResponseDTO;
-import net.axel.sharehope.security.domain.dto.user.UserUpdateDTO;
+import net.axel.sharehope.security.domain.dto.user.requests.UserPasswordUpdateDTO;
+import net.axel.sharehope.security.domain.dto.user.response.UserAuthResponseDTO;
+import net.axel.sharehope.security.domain.dto.user.response.UserResponseDTO;
+import net.axel.sharehope.security.domain.dto.user.requests.UserUpdateDTO;
 import net.axel.sharehope.security.domain.entity.AppUser;
 import net.axel.sharehope.security.repository.AppUserRepository;
 import net.axel.sharehope.security.service.Impl.JWTService;
@@ -15,6 +17,7 @@ import net.axel.sharehope.security.service.RoleService;
 import net.axel.sharehope.service.UserService;
 import net.axel.sharehope.service.AttachmentService;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -83,17 +86,46 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDTO update(Long id, UserUpdateDTO updateDTO) {
-        return null;
+    public UserAuthResponseDTO update(Long id, UserUpdateDTO updateDTO) {
+        AppUser user = getUser(id);
+        user.updateUser(updateDTO);
+
+        String avatar = (getAvatar(user.getId()) != null)
+                ? getAvatar(user.getId()).getFilePath()
+                : DEFAULT_AVATAR_URL;
+        user.setAvatar(avatar);
+
+        String newToken = jwtService.generateToken(user);
+
+        return mapper.mapToAuthResponseDTO(user, newToken);
     }
 
     @Override
-    public UserResponseDTO updatePassword(Long id, String password) {
-        return null;
+    public UserResponseDTO updatePassword(Long id, UserPasswordUpdateDTO passwordDTO) {
+        AppUser user = getUser(id);
+
+        String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        if (!user.getUsername().equals(currentUsername)) {
+            throw new IllegalArgumentException("You can only update your own password.");
+        }
+
+        if (!passwordEncoder.matches(passwordDTO.currentPassword(), user.getPassword())) {
+            throw new IllegalArgumentException("Current password is incorrect.");
+        }
+
+        String encodedPassword = passwordEncoder.encode(passwordDTO.newPassword());
+        user.setPassword(encodedPassword);
+
+        return mapper.mapToResponseDTO(user);
     }
 
     private AppUser getUser(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Can't find the user with id: " + id));
     }
+
+    private Attachment getAvatar(Long entityId) {
+        return attachmentService.findAttachment("AppUser", entityId);
+    }
+
 }

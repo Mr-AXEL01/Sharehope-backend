@@ -2,6 +2,7 @@ package net.axel.sharehope.web;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import net.axel.sharehope.security.domain.dto.user.requests.UserPasswordUpdateDTO;
 import net.axel.sharehope.security.domain.dto.user.response.UserAuthResponseDTO;
 import net.axel.sharehope.security.domain.dto.user.response.UserResponseDTO;
 import net.axel.sharehope.security.domain.dto.user.requests.UserUpdateDTO;
@@ -29,6 +30,12 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<UserAuthResponseDTO> update(@PathVariable("id") Long id, @RequestBody @Valid UserUpdateDTO updateDTO) {
         UserAuthResponseDTO updatedUser = service.update(id, updateDTO);
+        return ResponseEntity.ok(updatedUser);
+    }
+
+    @PatchMapping("/{id}/password")
+    public ResponseEntity<UserResponseDTO> updatePassword(@PathVariable("id") Long id, @RequestBody @Valid UserPasswordUpdateDTO passwordUpdateDTO) {
+        UserResponseDTO updatedUser = service.updatePassword(id, passwordUpdateDTO);
         return ResponseEntity.ok(updatedUser);
     }
 }
