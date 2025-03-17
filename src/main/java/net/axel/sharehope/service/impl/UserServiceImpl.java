@@ -51,6 +51,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserResponseDTO findByUsername(String username) {
+        return mapper.mapToResponseDTO(findUserEntity(username));
+    }
+
+    @Override
     public AppUser findUserEntity(String username) {
         AppUser user = repository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("Can't find the user with username: " + username));
@@ -61,12 +66,13 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+
     @Override
     public UserResponseDTO updateAvatar(Long id, MultipartFile avatar) {
         AppUser user = getUser(id);
         Attachment existingAttachment = attachmentService.findAttachment("AppUser", user.getId());
         if (existingAttachment != null) {
-            attachmentService.deleteAttachment(existingAttachment.getId(), "users/avatars");
+            attachmentService.deleteAttachment(existingAttachment.getId(), "users/avatars/");
         }
         String avatarPath;
         if (avatar != null && !avatar.isEmpty()) {

@@ -11,6 +11,8 @@ public interface UserService {
 
     UserResponseDTO findById(Long id);
 
+    UserResponseDTO findByUsername(String username);
+
     AppUser findUserEntity(String username);
 
     UserResponseDTO updateAvatar(Long id, MultipartFile avatarUrl);
