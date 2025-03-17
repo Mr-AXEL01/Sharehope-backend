@@ -21,15 +21,6 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-        AppUser user = getUser(username);
-        List<SimpleGrantedAuthority> authorities = user.getRoles()
-                .stream()
-                .map(role -> new SimpleGrantedAuthority(role.getRole()))
-                .toList();
-        return new User(user.getUsername(), user.getPassword(), authorities);
-    }
-
-    private AppUser getUser(String username) {
         return repository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with the username: " + username));
     }
