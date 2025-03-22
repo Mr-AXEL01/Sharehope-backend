@@ -31,7 +31,7 @@ public class ArticleController {
     @GetMapping
     public ResponseEntity<Page<ArticleProjectionDTO>> findAll(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "3") int size
+            @RequestParam(defaultValue = "10") int size
     ) {
         Page<ArticleProjectionDTO> articles = service.findAll(page, size);
         return ResponseEntity.ok(articles);
