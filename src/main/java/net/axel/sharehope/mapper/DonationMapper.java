@@ -11,8 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class DonationMapper {
 
-    public DonationResponseDTO toResponse(Donation donation) {
-//        System.out.println("\n============" + donation.getUser().getAvatar()+ "=========\n");
+    public DonationResponseDTO toResponse(Donation donation, String paymentIntentClientSecret) {
         return new DonationResponseDTO(
                 donation.getId(),
                 donation.getAmount(),
@@ -21,7 +20,8 @@ public class DonationMapper {
                 mapCategory(donation.getCategory()),
                 mapUser(donation.getUser()),
                 donation.getCreatedAt(),
-                donation.getAttachments()
+                donation.getAttachments(),
+                paymentIntentClientSecret
         );
     }
 
