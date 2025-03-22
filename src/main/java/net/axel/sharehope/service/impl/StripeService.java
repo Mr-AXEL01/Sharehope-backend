@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class StripeService {
 
-    public String processPayment(Double amount) throws StripeException {
+    public PaymentIntent processPayment(Double amount) throws StripeException {
         PaymentIntentCreateParams params =
                 PaymentIntentCreateParams.builder()
                         .setAmount((long) (amount * 100))
@@ -16,7 +16,6 @@ public class StripeService {
                         .addPaymentMethodType("card")
                         .build();
 
-        PaymentIntent intent = PaymentIntent.create(params);
-        return intent.getId();
+        return PaymentIntent.create(params);
     }
 }
