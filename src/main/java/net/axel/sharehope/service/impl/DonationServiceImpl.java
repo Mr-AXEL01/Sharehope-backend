@@ -1,6 +1,7 @@
 package net.axel.sharehope.service.impl;
 
 import com.stripe.exception.StripeException;
+import com.stripe.model.PaymentIntent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.axel.sharehope.domain.dtos.action.ActionCreateDTO;
@@ -50,13 +51,13 @@ public class DonationServiceImpl implements DonationService {
 
         Donation donation = Donation.createDonation(dto.amount(), dto.description(), category, user);
 
-        processPayment(dto.amount());
+        String paymentIntentClientSecret = processPayment(dto.amount());
 
         Donation savedDonation = repository.save(donation);
 
         processAttachments(dto.attachments(), savedDonation);
 
-        return mapper.toResponse(savedDonation);
+        return mapper.toResponse(savedDonation, paymentIntentClientSecret);
     }
 
     @Override
@@ -66,7 +67,7 @@ public class DonationServiceImpl implements DonationService {
                     List<String> attachments = attachmentService.findAttachmentUrls("Donation", donation.getId());
                     donation.setAttachments(attachments)
                             .setUser(getUser(donation.getUser().getUsername()));
-                    return mapper.toResponse(donation);
+                    return mapper.toResponse(donation, null);
                 })
                 .orElseThrow(() -> new ResourceNotFoundException("Donation", id));
     }
@@ -81,7 +82,7 @@ public class DonationServiceImpl implements DonationService {
                     List<String> attachments = attachmentService.findAttachmentUrls("Donation", donation.getId());
                     donation.setAttachments(attachments)
                             .setUser(getUser(donation.getUser().getUsername()));
-                    return mapper.toResponse(donation);
+                    return mapper.toResponse(donation, null);
                 })
                 .toList();
     }
@@ -97,7 +98,7 @@ public class DonationServiceImpl implements DonationService {
                 .map(donation -> {
                     List<String> attachments = attachmentService.findAttachmentUrls("Donation", donation.getId());
                     donation.setAttachments(attachments);
-                    return mapper.toResponse(donation);
+                    return mapper.toResponse(donation, null);
                 })
                 .toList();
     }
@@ -114,7 +115,7 @@ public class DonationServiceImpl implements DonationService {
             List<String> attachments = attachmentService.findAttachmentUrls("Donation", id);
             existingDonation.setAttachments(attachments);
         }
-        return mapper.toResponse(existingDonation);
+        return mapper.toResponse(existingDonation, null);
     }
 
     public DonationResponseDTO updateStatus(Long id, ActionStatusDTO statusDTO) {
@@ -123,7 +124,7 @@ public class DonationServiceImpl implements DonationService {
         donation.setUser(getUser(donation.getUser().getUsername()));
         List<String> attachments = attachmentService.findAttachmentUrls("Donation", id);
         donation.setAttachments(attachments);
-        return mapper.toResponse(donation);
+        return mapper.toResponse(donation, null);
     }
 
     @Override
@@ -140,11 +141,13 @@ public class DonationServiceImpl implements DonationService {
         repository.deleteById(id);
     }
 
-    private void processPayment(Double amount) throws StripeException {
+    private String processPayment(Double amount) throws StripeException {
         if (amount > 0) {
-            String paymentIntentId = stripeService.processPayment(amount);
-            log.info("Stripe Payment Successful: {}", paymentIntentId);
+            PaymentIntent paymentIntent = stripeService.processPayment(amount);
+            log.info("Stripe Payment Successful: {}", paymentIntent.getId());
+            return paymentIntent.getClientSecret();
         }
+        return null;
     }
 
     private void processAttachments(List<MultipartFile> attachments, Donation donation) {
