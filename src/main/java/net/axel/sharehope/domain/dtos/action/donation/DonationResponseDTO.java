@@ -15,6 +15,7 @@ public record DonationResponseDTO(
         CategoryEmbeddedDTO category,
         UserEmbeddedDTO user,
         Instant createdAt,
-        List<String> attachmentUrls
+        List<String> attachmentUrls,
+        String paymentIntentClientSecret
 ) {
 }
