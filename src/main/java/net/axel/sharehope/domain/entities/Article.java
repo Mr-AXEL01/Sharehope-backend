@@ -10,6 +10,8 @@ import net.axel.sharehope.domain.dtos.article.UpdateArticleDTO;
 import net.axel.sharehope.security.domain.entity.AppUser;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 import static net.axel.sharehope.util.UpdateUtils.updateField;
 
@@ -38,6 +40,9 @@ public class Article {
     @ManyToOne
     @JoinColumn(name = "author_id")
     private AppUser author;
+
+    @Transient
+    private List<String> attachments = new ArrayList<>();
 
     public static Article createArticle(String title, String description, String content, AppUser author) {
         Article article = new Article();

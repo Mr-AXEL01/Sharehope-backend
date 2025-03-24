@@ -16,12 +16,18 @@ import net.axel.sharehope.security.service.Impl.JWTService;
 import net.axel.sharehope.security.service.RoleService;
 import net.axel.sharehope.service.UserService;
 import net.axel.sharehope.service.AttachmentService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Comparator;
+import java.util.List;
 
 @Service
 @Transactional
@@ -124,6 +130,26 @@ public class UserServiceImpl implements UserService {
 
         return mapper.mapToResponseDTO(user);
     }
+
+    @Override
+    public Page<UserResponseDTO> getAllUsers(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<AppUser> usersPage = repository.findAll(pageable);
+
+        return usersPage.map(user -> {
+            String avatar = attachmentService.findAttachmentUrl("AppUser", user.getId());
+            user.setAvatar(avatar != null ? avatar : DEFAULT_AVATAR_URL);
+            return mapper.mapToResponseDTO(user);
+        });
+    }
+
+//    public List<AppUser> getAllUserseEntities() {
+//        List<AppUser> users = repository.findAll();
+//
+////        return users.stream()
+////                .sorted(Comparator.comparing(AppUser::getUsername));
+//
+//    }
 
     private AppUser getUser(Long id) {
         return repository.findById(id)

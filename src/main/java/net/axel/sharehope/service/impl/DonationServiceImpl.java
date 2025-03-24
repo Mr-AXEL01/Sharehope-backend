@@ -73,18 +73,16 @@ public class DonationServiceImpl implements DonationService {
     }
 
     @Override
-    public List<DonationResponseDTO> findAll(int page, int size) {
+    public Page<DonationResponseDTO> findAll(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Donation> donations = repository.findAllByOrderByCreatedAtDesc(pageable);
+        Page<Donation> donationPage = repository.findAllByOrderByCreatedAtDesc(pageable);
 
-        return donations.getContent().stream()
-                .map(donation -> {
-                    List<String> attachments = attachmentService.findAttachmentUrls("Donation", donation.getId());
-                    donation.setAttachments(attachments)
-                            .setUser(getUser(donation.getUser().getUsername()));
-                    return mapper.toResponse(donation, null);
-                })
-                .toList();
+        return donationPage.map(donation -> {
+            List<String> attachments = attachmentService.findAttachmentUrls("Donation", donation.getId());
+            donation.setAttachments(attachments)
+                    .setUser(getUser(donation.getUser().getUsername()));
+            return mapper.toResponse(donation, null);
+        });
     }
 
     @Override

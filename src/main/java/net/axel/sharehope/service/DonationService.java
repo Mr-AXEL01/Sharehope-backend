@@ -5,6 +5,7 @@ import net.axel.sharehope.domain.dtos.action.ActionCreateDTO;
 import net.axel.sharehope.domain.dtos.action.ActionStatusDTO;
 import net.axel.sharehope.domain.dtos.action.ActionUpdateDTO;
 import net.axel.sharehope.domain.dtos.action.donation.DonationResponseDTO;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ public interface DonationService {
 
     DonationResponseDTO findById(Long id);
 
-    List<DonationResponseDTO> findAll(int page, int size);
+    Page<DonationResponseDTO> findAll(int page, int size);
 
     List<DonationResponseDTO> findAllMyDonation(int page, int size);
 

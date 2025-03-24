@@ -10,6 +10,7 @@ public record ArticleResponseDTO(
         String description,
         String content,
         Instant createdAt,
-        UserEmbeddedDTO author
+        UserEmbeddedDTO author,
+        String[] attachments
 ) {
 }

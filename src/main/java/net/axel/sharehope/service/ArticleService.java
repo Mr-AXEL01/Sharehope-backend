@@ -10,9 +10,9 @@ public interface ArticleService {
 
     ArticleResponseDTO create(CreateArticleDTO requestDTO);
 
-    Page<ArticleProjectionDTO> findAll(int page, int size);
+    Page<ArticleResponseDTO> findAll(int page, int size);
 
-    ArticleProjectionDTO findById(Long id);
+    ArticleResponseDTO findById(Long id);
 
     ArticleResponseDTO update(Long id, UpdateArticleDTO requestDTO);
 

@@ -7,6 +7,7 @@ import net.axel.sharehope.security.domain.dto.user.response.UserAuthResponseDTO;
 import net.axel.sharehope.security.domain.dto.user.response.UserResponseDTO;
 import net.axel.sharehope.security.domain.dto.user.requests.UserUpdateDTO;
 import net.axel.sharehope.service.UserService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -43,5 +44,13 @@ public class UserController {
     public ResponseEntity<UserResponseDTO> updatePassword(@PathVariable("id") Long id, @RequestBody @Valid UserPasswordUpdateDTO passwordUpdateDTO) {
         UserResponseDTO updatedUser = service.updatePassword(id, passwordUpdateDTO);
         return ResponseEntity.ok(updatedUser);
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<UserResponseDTO>> getAllUsers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Page<UserResponseDTO> users = service.getAllUsers(page, size);
+        return ResponseEntity.ok(users);
     }
 }

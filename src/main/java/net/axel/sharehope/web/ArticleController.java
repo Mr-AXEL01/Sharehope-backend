@@ -23,23 +23,23 @@ public class ArticleController {
     private final ArticleService service;
 
     @PostMapping
-    public ResponseEntity<ArticleResponseDTO> create(@RequestBody @Valid CreateArticleDTO requestDto) {
+    public ResponseEntity<ArticleResponseDTO> create(@ModelAttribute @Valid CreateArticleDTO requestDto) {
         ArticleResponseDTO article = service.create(requestDto);
         return new ResponseEntity<>(article, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<Page<ArticleProjectionDTO>> findAll(
+    public ResponseEntity<Page<ArticleResponseDTO>> findAll(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
-        Page<ArticleProjectionDTO> articles = service.findAll(page, size);
+        Page<ArticleResponseDTO> articles = service.findAll(page, size);
         return ResponseEntity.ok(articles);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ArticleProjectionDTO> findById(@PathVariable("id") Long id) {
-        ArticleProjectionDTO article = service.findById(id);
+    public ResponseEntity<ArticleResponseDTO> findById(@PathVariable("id") Long id) {
+        ArticleResponseDTO article = service.findById(id);
         return ResponseEntity.ok(article);
     }
 

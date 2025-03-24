@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface ArticleRepository extends JpaRepository<Article, Long> {
 
-    Page<ArticleProjectionDTO> findAllByOrderByCreatedAtDesc(Pageable pageable);
+    Page<Article> findAllByOrderByCreatedAtDesc(Pageable pageable);
 
     Optional<ArticleProjectionDTO> findArticleById(Long id);
 }
